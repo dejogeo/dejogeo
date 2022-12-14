@@ -87,5 +87,16 @@ CONSTRAINT fk_kc
     FOREIGN KEY (kc_id)
     REFERENCES kc(kc_id));"""
 crsr.execute(sql_command)
+sql_command="""CREATE TABLE IF NOT EXISTS jasdnfkja (
+asfdas INTEGER PRIMARY KEY,
+asda VARCHAR(20),
+broj_cijevi INTEGER,
+koordinate FLOAT,
+kota_cijevi FLOAT,
+kc_id INTEGER,
+CONSTRAINT fk_kc
+    FOREIGN KEY (kc_id)
+    REFERENCES kc(kc_id));"""
+crsr.execute(sql_command)
 connection.commit()
 connection.close()
