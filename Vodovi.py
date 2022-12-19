@@ -22,12 +22,15 @@ class KO:
         crsr.execute(sql, params)
         connection.commit()
 
-    def prenos_KO_id(connection, naziv):
+    def prenos_KO_id(connection, naziv_KO):
         crsr = connection.cursor()
-        crsr.execute("SELECT KO_id FROM KO WHERE naziv=?", (a,))
-        rez_1 = crsr.fetchone()
-        connection.commit()
+        crsr.execute("SELECT KO_id FROM KO WHERE naziv=?", (naziv_KO,))
+        separator = ", "
+        rez_1 = separator.join(crsr.fetchone())
+        print(rez_1)
+        #connection.commit()
         return rez_1
+        #print(rez_1)
 
 class Kc:
     def __init__(self, broj_parcele, kc_id, KO_id):
@@ -51,10 +54,20 @@ class Kc:
 
     def prenos_kc_id(connection, broj_parcele):
         crsr = connection.cursor()
-        crsr.execute("SELECT KO_id FROM kc WHERE broj_parcele=?", (b,))
-        rez_2 = crsr.fetchone()
-        connection.commit()
+        crsr.execute("SELECT kc_id FROM kc WHERE broj_parcele=?", (broj_parcele,))
+        separator = ", "
+        rez_2 = separator.join(crsr.fetchone())
+        #connection.commit()
         return rez_2
+
+    def kontrola_parcele(connection, broj_kc):
+        crsr = connection.cursor()
+        crsr.execute("SELECT kc_id FROM kc WHERE broj_parcele=?", (broj_kc,))
+        separator = ", "
+        rez_3 = separator.join(crsr.fetchone())
+        print(rez_3)
+        #connection.commit()
+        return rez_3
 
 
 class Vodovod:
@@ -197,6 +210,8 @@ class Telekom:
         crsr.execute(sql, params)
         connection.commit()
 
+
+
 a=input('Unesite naziv katastarske opštine: ')
 rgc_1=str(uuid.uuid4())
 kat_op=KO(a,rgc_1)
@@ -206,7 +221,11 @@ b=input('Unesite broj katastarske čestice: ')
 rgc_2=str(uuid.uuid4())
 rez_1=str(KO.prenos_KO_id(connection,a))
 ka_ce=Kc(b,rgc_2,rez_1)
-Kc.unos_kc(connection,ka_ce)
+rez_3=str(Kc.kontrola_parcele(connection,b))
+if rez_3==():
+    Kc.unos_kc(connection,ka_ce)
+else:
+    pass
 
 while True:
     al = str(Kc.prenos_kc_id(connection, b))
