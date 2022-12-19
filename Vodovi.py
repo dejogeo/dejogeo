@@ -22,18 +22,19 @@ class KO:
         crsr.execute(sql, params)
         connection.commit()
 
-    def prenos_KO_id(connection,naziv):
+    def prenos_KO_id(connection, naziv):
         crsr = connection.cursor()
         crsr.execute("SELECT KO_id FROM KO WHERE naziv=?", (a,))
-        rez=crsr.fetchone()
+        rez_1 = crsr.fetchone()
         connection.commit()
-        return rez
+        return rez_1
 
 class Kc:
     def __init__(self, broj_parcele, kc_id, KO_id):
         self.broj_parcele = broj_parcele
         self.kc_id=kc_id
         self.KO_id=KO_id
+
 
     def unos_kc(connection,kc):
         """
@@ -48,7 +49,12 @@ class Kc:
         crsr.execute(sql, params)
         connection.commit()
 
-
+    def prenos_kc_id(connection, broj_parcele):
+        crsr = connection.cursor()
+        crsr.execute("SELECT KO_id FROM kc WHERE broj_parcele=?", (b,))
+        rez_2 = crsr.fetchone()
+        connection.commit()
+        return rez_2
 
 
 class Vodovod:
@@ -198,80 +204,82 @@ KO.unos_KO(connection,kat_op)
 
 b=input('Unesite broj katastarske čestice: ')
 rgc_2=str(uuid.uuid4())
-rez=str(KO.prenos_KO_id(connection,a))
-ka_ce=Kc(b,rgc_2,rez)
+rez_1=str(KO.prenos_KO_id(connection,a))
+ka_ce=Kc(b,rgc_2,rez_1)
 Kc.unos_kc(connection,ka_ce)
 
-#while True:
-#    c = int(input('Za uplanu vodovoda ukucaj 1,\nZa uplanu elektroenergetskog voda ukucaj 2,\nZa uplanu toplovoda ukucaj 3,\nZa uplanu kanalizacionog voda ukucaj 4,\nZa uplanu naftovoda ili gasovoda ukucaj 5,\nZa uplanu voda telekoma ukucaj 6: '))
-#    if c==1:
-#        d=int(input('Unesite id voda: '))
-#        e=int(input('Unesite broj zone voda: '))
-#        f=input('Unesite materijal voda: ')
-#        g=input('Unesite prečnik voda u milimetrima: ')
-#        h=input('Unesite koordinate lomnih tačaka: ')
-#        i=float(input('Unesite kotu vrha cijevi: '))
-#        vd=Vodovod(d,e,f,g,h,i,b)
-#        Vodovod.unos_vode(connection,vd)
-#
-#    elif c==2:
-#        j=int(input('Unesite id voda: '))
-#        k=int(input('Unesite napon voda: '))
-#        l=int(input('Unesite broj kablova istog napona: '))
-#        m=input('Unesite koordinate tačaka lomova voda: ')
-#        n=float(input('Unesite kotu kabla: '))
-#        st=Struja(j,k,l,m,n,b)
-#        Struja.unos_struje(connection,st)
-#
-#    elif c==3:
-#        o=int(input('Unesite id voda: '))
-#        p=input('Unesite materijal voda: ')
-#        q=int(input('Unesite precnik cijevi: '))
-#        r=int(input('Unesite broj cijevi: '))
-#        s=input('Unesite koordinate tačaka lomova voda: ')
-#        t=float(input('Unesite kotu cijevi: '))
-#        tp=Toplovod(o,p,q,r,s,t,b)
-#        Toplovod.unos_toplovoda(connection,tp)
-#
-#    elif c==4:
-#        u=int(input('Unesite id voda: '))
-#        v=input('Unesite oznaku sistema: ')
-#        w=input('Unesite materijal cijevi: ')
-#        x=int(input('Unesite presjek cijevi: '))
-#        y=input('Unesite koordinate tačaka lomova voda: ')
-#        z=float(input('Unesite kotu cijevi: '))
-#        kan=Kanalizacija(u,v,w,x,y,z,b)
-#        Kanalizacija.unos_kanalizacije(connection,kan)
-#
-#    elif c==5:
-#        aa=int(input('Unesite id voda: '))
-#        ab=input('Unesite materijal cijevi: ')
-#        ac=float(input('Unesite prečnik cijevi: '))
-#        ad=int(input('Unesite broj cijevi: '))
-#        ae=input('Unesite koordinate tačaka lomova voda: ')
-#        af=float(input('Unesite kotu cijevi: '))
-#        ng=Naftagas(aa,ab,ac,ad,ae,af,b)
-#        Naftagas.unos_naftagasa(connection,ng)
-#
-#    elif c==6:
-#        ag=int(input('Unesite id voda: '))
-#        ah=input('Unesite vrstu kabla: ')
-#        ai=int(input('Unesite broj cijevi: '))
-#        aj=input('Unesite koordinate tačaka lomova voda: ')
-#        ak=float(input('Unesite kotu cijevi: '))
-#        tlk=Telekom(ag,ah,ai,aj,ak,b)
-#        Telekom.unos_telekoma(connection,tlk)
-#
-#    else:
-#        True
-#
-#    upit_1 = input('Da li želite da završite sa unosom? ').upper()
-#    while upit_1 != 'DA' and upit_1 != 'NE':
-#        upit_1 = input('Unesite "da" ili "ne"!').upper()
-#    if upit_1 == 'NE':
-#        True
-#    elif upit_1 == 'DA':
-#        break
+while True:
+    al = str(Kc.prenos_kc_id(connection, b))
+    c = int(input('Za uplanu vodovoda ukucaj 1,\nZa uplanu elektroenergetskog voda ukucaj 2,\nZa uplanu toplovoda ukucaj 3,\nZa uplanu kanalizacionog voda ukucaj 4,\nZa uplanu naftovoda ili gasovoda ukucaj 5,\nZa uplanu voda telekoma ukucaj 6: '))
+    if c==1:
+        d=str(uuid.uuid4())
+        e=int(input('Unesite broj zone voda: '))
+        f=input('Unesite materijal voda: ')
+        g=input('Unesite prečnik voda u milimetrima: ')
+        h=input('Unesite koordinate lomnih tačaka: ')
+        i=float(input('Unesite kotu vrha cijevi: '))
+
+        vd=Vodovod(d,e,f,g,h,i,al)
+        Vodovod.unos_vode(connection,vd)
+
+    elif c==2:
+        j=str(uuid.uuid4())
+        k=int(input('Unesite napon voda: '))
+        l=int(input('Unesite broj kablova istog napona: '))
+        m=input('Unesite koordinate tačaka lomova voda: ')
+        n=float(input('Unesite kotu kabla: '))
+        st=Struja(j,k,l,m,n,al)
+        Struja.unos_struje(connection,st)
+
+    elif c==3:
+        o=str(uuid.uuid4())
+        p=input('Unesite materijal voda: ')
+        q=int(input('Unesite precnik cijevi: '))
+        r=int(input('Unesite broj cijevi: '))
+        s=input('Unesite koordinate tačaka lomova voda: ')
+        t=float(input('Unesite kotu cijevi: '))
+        tp=Toplovod(o,p,q,r,s,t,al)
+        Toplovod.unos_toplovoda(connection,tp)
+
+    elif c==4:
+        u=str(uuid.uuid4())
+        v=input('Unesite oznaku sistema: ')
+        w=input('Unesite materijal cijevi: ')
+        x=int(input('Unesite presjek cijevi: '))
+        y=input('Unesite koordinate tačaka lomova voda: ')
+        z=float(input('Unesite kotu cijevi: '))
+        kan=Kanalizacija(u,v,w,x,y,z,al)
+        Kanalizacija.unos_kanalizacije(connection,kan)
+
+    elif c==5:
+        aa=str(uuid.uuid4())
+        ab=input('Unesite materijal cijevi: ')
+        ac=float(input('Unesite prečnik cijevi: '))
+        ad=int(input('Unesite broj cijevi: '))
+        ae=input('Unesite koordinate tačaka lomova voda: ')
+        af=float(input('Unesite kotu cijevi: '))
+        ng=Naftagas(aa,ab,ac,ad,ae,af,al)
+        Naftagas.unos_naftagasa(connection,ng)
+
+    elif c==6:
+        ag=str(uuid.uuid4())
+        ah=input('Unesite vrstu kabla: ')
+        ai=int(input('Unesite broj cijevi: '))
+        aj=input('Unesite koordinate tačaka lomova voda: ')
+        ak=float(input('Unesite kotu cijevi: '))
+        tlk=Telekom(ag,ah,ai,aj,ak,al)
+        Telekom.unos_telekoma(connection,tlk)
+
+    else:
+        True
+
+    upit_1 = input('Da li želite da završite sa unosom? ').upper()
+    while upit_1 != 'DA' and upit_1 != 'NE':
+        upit_1 = input('Unesite "da" ili "ne"!').upper()
+    if upit_1 == 'NE':
+        True
+    elif upit_1 == 'DA':
+        break
 
 
 
