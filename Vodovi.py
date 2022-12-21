@@ -27,7 +27,7 @@ class KO:
         crsr.execute("SELECT KO_id FROM KO WHERE naziv=?", (naziv_KO,))
         separator = ", "
         rez_1 = separator.join(crsr.fetchone())
-        print(rez_1)
+        #print(rez_1)
         #connection.commit()
         return rez_1
         #print(rez_1)
@@ -63,8 +63,8 @@ class Kc:
     def kontrola_parcele(connection, broj_kc):
         crsr = connection.cursor()
         crsr.execute("SELECT kc_id FROM kc WHERE broj_parcele=?", (broj_kc,))
-        separator = ", "
-        rez_3 = separator.join(crsr.fetchone())
+        #separator = ", "
+        rez_3 = crsr.fetchall()
         print(rez_3)
         #connection.commit()
         return rez_3
@@ -221,11 +221,10 @@ b=input('Unesite broj katastarske čestice: ')
 rgc_2=str(uuid.uuid4())
 rez_1=str(KO.prenos_KO_id(connection,a))
 ka_ce=Kc(b,rgc_2,rez_1)
-rez_3=str(Kc.kontrola_parcele(connection,b))
-if rez_3==():
-    Kc.unos_kc(connection,ka_ce)
-else:
-    pass
+rez_3=Kc.kontrola_parcele(connection,b)
+if rez_3==[]:
+    Kc.unos_kc(connection, ka_ce)
+
 
 while True:
     al = str(Kc.prenos_kc_id(connection, b))
